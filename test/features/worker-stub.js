@@ -17,7 +17,29 @@
 
 onmessage = function (e) {
   var data = e.data;
-  postMessage({action: 'test', result: data.action == 'test' &&
-                                       data.data instanceof Uint8Array});
+  switch (data.action) {
+  case 'test':
+    postMessage({action: 'test', result: data.data instanceof Uint8Array});
+    break;
+  case 'test-transfers':
+    postMessage({action: 'test-transfers', result: data.data[0] === 255});
+    break;
+  case 'xhr':
+    var xhr = new XMLHttpRequest();
+    var responseExists = 'response' in xhr;
+    // check if the property is actually implemented
+    try {
+      var dummy = xhr.responseType;
+    } catch (e) {
+      responseExists = false;
+    }
+    postMessage({action: 'xhr', result: responseExists});
+    break;
+  case 'TextDecoder':
+    postMessage({action: 'TextDecoder',
+                 result: typeof TextDecoder !== 'undefined',
+                 emulated: typeof FileReaderSync !== 'undefined'});
+    break;
+  }
 };
 

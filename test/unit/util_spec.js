@@ -1,5 +1,6 @@
 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+/* globals expect, it, describe, combineUrl, Dict, isDict, Name */
 
 'use strict';
 
@@ -60,6 +61,19 @@ describe('util', function() {
       var result = combineUrl(baseUrl, url);
       var expected = 'http://server/index.html';
       expect(result).toEqual(expected);
+    });
+  });
+
+  describe('isDict', function() {
+    it('handles empty dictionaries with type check', function() {
+      var dict = new Dict();
+      expect(isDict(dict, 'Page')).toEqual(false);
+    });
+
+    it('handles dictionaries with type check', function() {
+      var dict = new Dict();
+      dict.set('Type', new Name('Page'));
+      expect(isDict(dict, 'Page')).toEqual(true);
     });
   });
 
